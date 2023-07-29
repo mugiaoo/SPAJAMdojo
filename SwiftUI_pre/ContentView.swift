@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+extension Color{
+    static let coutomAccentColor = Color("Accent")
+}
+
 //最初のView
 struct ContentView: View {
     @State private var activie = false
