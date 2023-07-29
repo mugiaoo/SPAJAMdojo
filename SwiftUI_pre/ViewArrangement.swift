@@ -17,7 +17,7 @@ extension UINavigationController {
 }
 
 struct ViewArrangement: View {
-    @State private var activie = false
+    //@State private var activie = false
     @State private var active = false
     // @Environment(\.dismiss) var dismiss
     //@State var selectedTab = 1
