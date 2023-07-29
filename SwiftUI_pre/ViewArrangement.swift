@@ -22,8 +22,9 @@ struct ViewArrangement: View {
     // @Environment(\.dismiss) var dismiss
     //@State var selectedTab = 1
     @State private var isPresented: Bool = false
+    @State private var bodyView: CGSize = .zero
     
-    var columns: [GridItem] = Array(repeating: .init(.flexible()), count: 4)
+    var columns: [GridItem] = Array(repeating: .init(.flexible()), count: 1)
     
     var body: some View {
         
@@ -33,18 +34,88 @@ struct ViewArrangement: View {
                 Color.white //背景の色
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 16) {
-                        // TODO: げんどを決めなければいけない？？それとも無限？？？
+                        // TODO: 限度を決めなければいけない？？それとも無限？？
+                        // TODO: それぞれの配置，一つずつの
                         ForEach(0..<100) { index in
                             VStack {
-                                Image("image0") // 画像を表示
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 200, height: 100)
-                                    .cornerRadius(10) //角まる
+                                HStack {
+                                    Rectangle() //icon
+                                        .foregroundColor(.clear)
+                                        .frame(width: 31, height: 31)
+                                        .background(
+                                            Image("icon0")
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                                .frame(width: 31, height: 31)
+                                                .clipped()
+                                        )
+                                        .cornerRadius(31)
+                                        .offset(x: -65, y: 4)
+                                    Text("icon0_name") //名前
+                                        .font(
+                                            Font.custom("Inria Sans", size: 14)
+                                                .weight(.bold)
+                                        )
+                                        .foregroundColor(.black)
+                                        .offset(x: -63, y: 4)
+                                    Text("東京都") //場所
+                                        .font(
+                                            Font.custom("Inria Sans", size: 10)
+                                                .weight(.bold)
+                                        )
+                                        .foregroundColor(.black)
+                                        .offset(x: 65, y: 12)
+                                    Text("2023.07.29") //日付
+                                        .font(
+                                            Font.custom("Inria Sans", size: 10)
+                                                .weight(.bold)
+                                        )
+                                        .foregroundColor(.black)
+                                        .offset(x: 65, y: 12)
+                                    Text("12:05") //時刻
+                                        .font(
+                                            Font.custom("Inria Sans", size: 9)
+                                                .weight(.bold)
+                                        )
+                                        .foregroundColor(Color(red: 0.49, green: 0.49, blue: 0.49))
+                                        .offset(x: 65, y: 12)
+                                }
                                 
-                                Text("Item \(index + 1)") // テキストを表示
-                                    .foregroundColor(.black)
-                                    .font(.headline)
+                                Rectangle()
+                                    .foregroundColor(.clear)
+                                    .frame(width: 390, height: 200)
+                                    .background(
+                                        Image("image3")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width:390, height: 200)
+                                            .clipped()
+                                    )
+                                ZStack {
+                                    Rectangle()
+                                        .foregroundColor(.clear)
+                                    
+                                        .frame(width: 54, height: 23)
+                                        .background(.white)
+                                        .cornerRadius(11.5)
+                                        .shadow(color: .black.opacity(0.15), radius: 2.5, x: 0, y: 2)
+                                        .position(x: 540, y: 12)
+                                    Image("good")
+                                        .frame(width: 11, height: 12)
+                                        .overlay(
+                                            Rectangle()
+                                                .stroke(Color(red: 0.19, green: 0.16, blue: 0.16), lineWidth: 0)
+                                        )
+                                        .position(x: 530, y: 12)
+                                    Text("15") //goodnumber
+                                        .font(
+                                            Font.custom("Inria Sans", size: 10)
+                                                .weight(.bold)
+                                        )
+                                        .foregroundColor(.black)
+                                        .frame(width: 12, height: 15, alignment: .topLeading)
+                                        .position(x: 552, y: 14)
+                                }
                             }
                         }
                     }
@@ -84,7 +155,9 @@ struct ViewArrangement: View {
                         .cornerRadius(10)
                         .buttonStyle(TransparentButtonStyle())
                     }
+                    .accentColor(Color.coutomAccentColor)
                     .position(x: 480, y: -92)
+                    
                 }
                 .navigationTitle("") // Clear navigation title
                 .navigationBarHidden(true) // Hide the navigation bar
