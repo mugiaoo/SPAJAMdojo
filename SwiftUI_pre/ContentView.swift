@@ -7,49 +7,67 @@
 
 import SwiftUI
 
+
+
 extension Color{
     static let coutomAccentColor = Color("Accent")
 }
 
-//最初のView
-struct ContentView: View {
-    @State private var activie = false
-    @State private var backgroundColor = UIColor.white
+struct CameraView: View {
+    
+    @State var imageData : Data = .init(capacity:0)
+    @State var source:UIImagePickerController.SourceType = .photoLibrary
+    @State var userName: String = ""
+    @ObservedObject var semiAPI = SemiService()
+    
+    @State var isActionSheet = false
+    @State var isImagePicker = false
+    
     var body: some View {
-        NavigationStack{ //NavigationViewばつ
-            ZStack{
-                Color(backgroundColor)
-                    .ignoresSafeArea()
-                VStack{
-                    Text("FirstPage")
-                    Button { //ボタン
-                        activie.toggle() //ボタン押下で実行したい処理記述
-                        //backgroundColor = .cyan //遷移したのち前の画面をシアンにする
-                    } label: { //TextやImageでボタンの表示作成
-                        HStack{
-                            Image(systemName: "arrowshape.right.fill")
-                            Text("NextPage")
+            NavigationView{
+                VStack(spacing:0){
+                        ZStack{
+                            NavigationLink(
+                                destination: Imagepicker(show: $isImagePicker, image: $imageData, sourceType: source),
+                                isActive:$isImagePicker,
+                                label: {
+                                    Text("")
+                                })
+                            VStack{
+                                if imageData.count != 0{
+                                    Image(uiImage: UIImage(data: self.imageData)!)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(height: 250)
+                                        .cornerRadius(15)
+                                        .padding()
+                                }
+                                HStack(spacing:30){
+                                    Button(action: {
+                                        self.source = .photoLibrary
+                                        self.isImagePicker.toggle()
+                                    }, label: {
+                                        Text("アルバム")
+                                    })
+//                                    Button(action: {
+//                                        self.source = .camera
+//                                        self.isImagePicker.toggle()
+//                                    }, label: {
+//                                        Text("カメラ")
+//                                    })
+                                }
+                                
+                                TextField("投稿者名", text: $userName).padding()
+                                Button("投稿"){
+                                    semiAPI.pushImage(user_name:userName, img: self.imageData)
+                                }
+                                
+                            }
                         }
                 }
-
+                .navigationBarTitle("Home", displayMode: .inline)
             }
-            }.buttonStyle(.bordered)
-                .navigationDestination(isPresented: $activie, destination: {
-                    ViewArrangement() //遷移先画面
-                })
-        }
+        .ignoresSafeArea(.all, edges: .top)
+        .background(Color.primary.opacity(0.06).ignoresSafeArea(.all, edges: .all))
     }
 }
-////遷移先のView
-//struct nextView: View {
-//    var body: some View {
-//        NavigationView {
-//            ZStack{
-//                Color.black
-//                    .ignoresSafeArea()
-//                Text("SecondView")
-//                    .foregroundColor(.white)
-//            }
-//        }
-//    }
-//}
